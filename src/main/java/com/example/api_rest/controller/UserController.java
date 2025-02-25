@@ -9,6 +9,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/users")
@@ -30,6 +33,16 @@ public class UserController {
     public ResponseEntity<UserDTO> findById(@PathVariable Long id){
         var user = userService.findById(id);
         return ResponseEntity.ok(user);
+    }
+    
+    @PostMapping("/create-all")
+    public ResponseEntity<UserDTO> createAllEntities(@RequestBody UserDTO user){
+        var userCreated = userService.createAll(user);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(userCreated.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(userCreated);
     }
 
     @PostMapping

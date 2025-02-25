@@ -11,6 +11,8 @@ import com.example.api_rest.domain.repository.CardRepository;
 import com.example.api_rest.dto.CardDTO;
 import com.example.api_rest.service.CardService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CardServiceImpl implements CardService{
 
@@ -27,6 +29,7 @@ public class CardServiceImpl implements CardService{
     }
 
     @Override
+    @Transactional
     public CardDTO create(CardDTO cardToCreate) {
         try {
             Card card = new Card();
@@ -49,6 +52,7 @@ public class CardServiceImpl implements CardService{
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         cardRepository.deleteById(id);
     }

@@ -29,6 +29,7 @@ public class FeatureServiceImpl implements FeatureService{
     }
 
     @Override
+    @Transactional
     public FeatureDTO create(FeatureDTO featureToCreate) {
         try {
             Feature feature = new Feature();

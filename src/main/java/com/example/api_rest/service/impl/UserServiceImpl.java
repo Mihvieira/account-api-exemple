@@ -45,24 +45,26 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO create(UserMinDTO userToCreate) {
-        try {
-            User user = new User();
-            if (userToCreate.getId() != null) {
-                user.setId(userToCreate.getId());
-            }
-            user.setAccount(accountRepository.findById(userToCreate.getAccountId()).orElseThrow(NoSuchElementException::new));
-            user.setFeatures(userToCreate.getFeaturesId().stream()
-                    .map(id -> featureRepository.findById(id).orElseThrow(NoSuchElementException::new))
-                    .collect(Collectors.toList()));
-            user.setCard(cardRepository.findById(userToCreate.getCardId()).orElseThrow(NoSuchElementException::new));
-            user.setNews(userToCreate.getNewsIds().stream().map(id -> newsRepository.findById(id).orElseThrow(NoSuchElementException::new))
-                    .collect(Collectors.toList()));
-            user.setName(userToCreate.getName());
-            User savedUser = userRepository.save(user);
-            return new UserDTO(savedUser);
-        } catch (Exception e) {
-            throw new RuntimeException("Unexpected error: " + e.getMessage());
+        if (userToCreate.getAccountId() == null || userToCreate.getFeaturesId() == null 
+            || userToCreate.getCardId() == null || userToCreate.getNewsIds() == null || userToCreate.getName() == null) {
+            throw new IllegalArgumentException("Account, Features, Card, News and Name must not be null");
         }
+        User user = new User();
+        if (userToCreate.getId() != null) {
+            user.setId(userToCreate.getId());
+        }
+        user.setAccount(accountRepository.findById(userToCreate.getAccountId()).orElseThrow(NoSuchElementException::new));
+        user.setFeatures(userToCreate.getFeaturesId().stream()
+            .map(id -> featureRepository.findById(id).orElseThrow(NoSuchElementException::new))
+            .collect(Collectors.toList()));
+        user.setCard(cardRepository.findById(userToCreate.getCardId()).orElseThrow(NoSuchElementException::new));
+        user.setNews(userToCreate.getNewsIds().stream()
+            .map(id -> newsRepository.findById(id).orElseThrow(NoSuchElementException::new))
+            .collect(Collectors.toList()));
+        user.setName(userToCreate.getName());
+
+        User savedUser = userRepository.save(user);
+        return new UserDTO(savedUser);
     }
 
     @Override
@@ -84,5 +86,25 @@ public class UserServiceImpl implements UserService {
     public List<UserMinDTO> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream().map(UserMinDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public UserDTO createAll(UserDTO userToCreate) {
+        try {
+            User user = new User();
+            if (userToCreate.getId() != null) {
+                user.setId(userToCreate.getId());
+            }
+            user.setAccount(userToCreate.getAccount());
+            user.setFeatures(userToCreate.getFeatures());
+            user.setCard(userToCreate.getCard());
+            user.setNews(userToCreate.getNews());
+            user.setName(userToCreate.getName());
+            User savedUser = userRepository.save(user);
+            return new UserDTO(savedUser);
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error: " + e.getMessage());
+        }
     }
 }

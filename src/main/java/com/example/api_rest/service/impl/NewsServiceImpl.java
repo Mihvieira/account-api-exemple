@@ -29,6 +29,7 @@ public class NewsServiceImpl implements NewsService{
     }
 
     @Override
+    @Transactional
     public NewsDTO create(NewsDTO newsToCreate) {
         try {
             News news = new News();

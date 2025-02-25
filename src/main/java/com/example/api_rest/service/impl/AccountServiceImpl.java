@@ -29,6 +29,7 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    @Transactional
     public AccountDTO create(AccountDTO accountToCreate) {
         try {
             Account account = new Account();
