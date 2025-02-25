@@ -20,5 +20,4 @@ public class Account {
     @Column(name = "adicional-limit", scale = 2, precision = 13)
     private BigDecimal limit;
 
-
 }

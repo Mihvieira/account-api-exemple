@@ -1,10 +1,15 @@
 package com.example.api_rest.service;
 
-import com.example.api_rest.domain.model.User;
+import java.util.List;
+
+import com.example.api_rest.dto.UserDTO;
+import com.example.api_rest.dto.UserMinDTO;
 
 public interface UserService {
 
-    User findById(Long id);
-
-    User create(User userToCreate);
+    UserDTO findById(Long id);
+    UserDTO create(UserMinDTO userToCreate);
+    void delete(Long id);
+    UserDTO update(UserMinDTO userToUpdate);
+    List<UserMinDTO> findAll();
 }
