@@ -2,4 +2,4 @@ spring:
   application:
     name: api-rest
   profiles:
-    active: dev
+    active: prod
